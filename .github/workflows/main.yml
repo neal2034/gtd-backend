@@ -59,3 +59,36 @@ jobs:
           tags: ${{ needs.prepare.outputs.tags }}
           cache-from: type=gha,scope=backend
           cache-to: type=gha,scope=backend,mode=max
+
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    needs: [prepare, build]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Compose Docker Command
+        uses: neal2034/gitactions/docker-run-cmd@master
+        id: docker
+        with:
+          name: todo-backend
+          image: ${{ needs.prepare.outputs.image }}
+          envfile: /root/backend_envs/todo/todo_env
+          post-start: sleep 2 && docker exec phoenix-nginx  nginx -s reload
+
+      - name: Deploy
+        uses: neal2034/gitactions/ssh-action@master
+        with:
+          dryrun: false
+          key: ${{ secrets.DEV_HOST_PRIVATE_KEY }}
+          nodes: ${{ secrets.DEV_HOST }}
+          node-index: 0
+          script: ${{ steps.docker.outputs.cmd }}
+
+      - name: Notify Slack
+        uses: 8398a7/action-slack@v3
+        if: ${{ job.status }} != 'skipped'
+        env:
+          SLACK_WEBHOOK_URL: ${{  secrets.SLACK_WEBHOOK_URL }}
+        with:
+          status: ${{ job.status }}
+          author_name: Notify
