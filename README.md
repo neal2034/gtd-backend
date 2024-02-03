@@ -1,2 +1,16 @@
-# gtd-backend
-a todo app backend
+## Description
+
+ToDo App
+
+## Installation
+
+```bash
+$ npm install
+```
+
+## Running the app
+
+```bash
+# watch mode
+$ npm run start:dev
+```
