@@ -1,0 +1,12 @@
+name: Build Backend
+
+on:
+  push:
+    branches: [dev, master]
+
+  workflow_dispatch:
+
+env:
+  DOCKER_SERVER: registry.cn-hangzhou.aliyuncs.com
+  DOCKER_NAMESPACE: elgo-todo
+  DOCKER_REPOSITORY: backend
