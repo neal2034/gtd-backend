@@ -97,6 +97,7 @@ export class AuthService {
       throw new UserExistException();
     }
     const user = plainToClass(IRegisterDto, registerDto).toEntity(User);
+    user.password = registerDto.password;
     await this.userManager.addEntity(user);
   }
 }

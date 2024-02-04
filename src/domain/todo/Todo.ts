@@ -5,7 +5,7 @@ import { User } from "../user/User";
 @Entity()
 export class Todo extends AppBaseEntity {
   @Column()
-  name: string;
+  title: string;
   @Column("text", { nullable: true })
   description: string;
   @Column({ default: false })
@@ -13,7 +13,7 @@ export class Todo extends AppBaseEntity {
   @Column("timestamp", { nullable: true })
   doneDate: Date;
   @Column("timestamp", { nullable: true })
-  dueDate: Date;
+  due: Date;
   @ManyToOne(() => User)
   @JoinColumn({ name: "user_id", referencedColumnName: "id" })
   user: User;

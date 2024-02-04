@@ -26,7 +26,6 @@ const envPath = getEnvPath(`${__dirname}/../config/env`);
       isGlobal: true,
       validationSchema: Joi.object({
         PORT: Joi.number().required(),
-        BASE_URL: Joi.string().required(),
         DATABASE_HOST: Joi.string().required(),
         DATABASE_NAME: Joi.string().required(),
         DATABASE_USER: Joi.string().required(),

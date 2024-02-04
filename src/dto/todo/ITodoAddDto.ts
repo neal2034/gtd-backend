@@ -1,9 +1,16 @@
-import { IsBoolean, IsString } from "class-validator";
+import { IsDate, IsOptional, IsString } from "class-validator";
+import { Transform } from "class-transformer";
 import { BaseInDto } from "../base/BaseInDto";
 
-export class ITodoAddDto extends BaseInDto{
+export class ITodoAddDto extends BaseInDto {
   @IsString()
-  name:string;
-  @IsBoolean()
-  status:boolean;
+  title: string;
+  @IsString()
+  @IsOptional()
+  description: string;
+
+  @Transform(({ value }) => new Date(value), { toClassOnly: true })
+  @IsDate()
+  @IsOptional()
+  due: Date;
 }
