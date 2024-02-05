@@ -2,7 +2,7 @@ name: Build Backend
 
 on:
   push:
-    branches: [dev, master]
+    branches: [develop, master]
 
   workflow_dispatch:
 

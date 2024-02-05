@@ -16,7 +16,7 @@ RUN npm run build
 
 # 阶段 2: 运行
 # 使用较小的基础镜像来减少最终镜像的大小
-FROM node:18-alpine
+FROM node:18
 
 # 设置非 root 用户，提高安全性
 USER node
