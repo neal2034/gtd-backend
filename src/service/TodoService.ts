@@ -19,7 +19,8 @@ export class TodoService {
     const user = await this.userManage.findByUsername(userName);
     const todo = plainToClass(Todo, addDto);
     todo.user = user;
-    await this.todoManager.addEntity(todo);
+    const newTodo = await this.todoManager.addEntity(todo);
+    return OTodoDto.getFromEntity(newTodo);
   }
 
   async listTodos(page: number, userName: string) {
@@ -33,6 +34,19 @@ export class TodoService {
     });
     const dtos = entities.map((entity) => OTodoDto.getFromEntity(entity));
     return { total, data: dtos };
+  }
+
+  async listAllTodos(userName: string, isDone: boolean) {
+    const user = await this.userManage.findByUsername(userName);
+    const entities = await this.todoManager.listEntity({
+      relations: { user: true },
+      where: {
+        user: { id: user.id },
+        isDone,
+      },
+    });
+    const dtos = entities.map((entity) => OTodoDto.getFromEntity(entity));
+    return { data: dtos };
   }
 
   async getTodo(id: number, username: string) {
@@ -57,6 +71,7 @@ export class TodoService {
     const todo = plainToClass(Todo, editDto);
 
     await this.todoManager.editEntity(todo);
+    return OTodoDto.getFromEntity(todo);
   }
 
   async deleteTodo(id: number, username: string) {
@@ -68,5 +83,6 @@ export class TodoService {
       throw new UnAuthorizedException();
     }
     this.todoManager.softDelete(id);
+    return OTodoDto.getFromEntity(todo);
   }
 }

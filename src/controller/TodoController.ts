@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  ParseBoolPipe,
   ParseIntPipe,
   Post,
   Put,
@@ -21,7 +22,7 @@ export class TodoController {
   @Post()
   async addTodo(@Body() addDto: ITodoAddDto, @Req() req: Request) {
     const username = req.user.username;
-    await this.todoService.addTodo(addDto, username);
+    return await this.todoService.addTodo(addDto, username);
   }
 
   @Get("detail")
@@ -35,13 +36,22 @@ export class TodoController {
     return await this.todoService.listTodos(page, username);
   }
 
+  @Get("all")
+  async listAllTodo(
+    @Query("isDone", ParseBoolPipe) isDone,
+    @Req() req: Request
+  ) {
+    const username = req.user.username;
+    return await this.todoService.listAllTodos(username, isDone);
+  }
+
   @Put()
   async updateTodo(@Body() editDto: ITodoEditDto, @Req() req: Request) {
-    await this.todoService.updateToDo(editDto, req.user.username);
+    return await this.todoService.updateToDo(editDto, req.user.username);
   }
 
   @Delete()
   async deleteTodo(@Query("id", ParseIntPipe) id: number, @Req() req: Request) {
-    await this.todoService.deleteTodo(id, req.user.username);
+    return await this.todoService.deleteTodo(id, req.user.username);
   }
 }
