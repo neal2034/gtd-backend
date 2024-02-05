@@ -22,7 +22,7 @@ export class AuthController {
   }
 
   @PublicRouter()
-  @Post("signup")
+  @Post("register")
   async register(@Body() registerDto: IRegisterDto) {
     return await this.authService.register(registerDto);
   }
